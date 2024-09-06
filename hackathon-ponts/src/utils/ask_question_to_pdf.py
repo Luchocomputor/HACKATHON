@@ -58,6 +58,20 @@ def read_pdf(filename):
     return context
 
 
+def read_txt(filename):
+    context = ""
+
+    # Open the TXT file
+
+    with open(filename, "r", encoding="utf-8") as txt_file:
+        # Read all lines in the TXT file
+        for line in txt_file:
+            # Remove any newline characters and append the line to context
+            context += line.strip()
+
+    return context
+
+
 filename = os.path.join(os.path.dirname(__file__), "filename.pdf")
 document = read_pdf(filename)
 chunks = split_text(document)
