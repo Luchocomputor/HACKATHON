@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, jsonify, redirect, url_for
-from src.utils.ask_question_to_pdf import ask_question_to_pdf, read_pdf, split_text
+from src.utils.ask_question_to_pdf import ask_question_to_pdf, read_pdf, split_text, read_txt
 import os
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -37,6 +37,11 @@ document = read_pdf(filename)
 chunks = split_text(document)
 
 course_content = chunks[0]
+
+
+
+
+
 
 
 @app.route("/")
@@ -109,9 +114,15 @@ def upload_course():
             # Sauvegarde le fichier dans le répertoire configuré
             file.save(filepath)
 
-            # Lire et traiter le fichier PDF uploadé
-            document = read_pdf(filepath)
-            chunks = split_text(document)
+            if filename.lower().endswith('.pdf'):
+                # Lire et traiter le fichier PDF uploadé
+                document = read_pdf(filepath)
+                chunks = split_text(document)
+
+            if filename.lower().endswith('.txt'):
+                # Lire et traiter le fichier PDF uploadé
+                document = read_txt(filepath)
+                chunks = split_text(document)
 
             # Mettre à jour la variable course_content avec le contenu du fichier uploadé
             course_content = chunks[0]
